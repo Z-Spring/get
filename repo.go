@@ -1,5 +1,5 @@
 /*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
+Copyright © 2022 murphy <murphyqq1@gmail.com>
 
 */
 package main

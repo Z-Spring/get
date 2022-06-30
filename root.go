@@ -1,5 +1,5 @@
 /*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
+Copyright © 2022 murphy <murphyqq1@gmail.com>
 
 */
 package main
@@ -19,13 +19,8 @@ For example: you want to import the gin package,
 but you don't remember the full path to import the package (github.com/gin-gonic/gin). 
 Now you can use this tool to get the package you want more easily by typing a simple statement: [get gin]. 
 It's that simple!`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
 }
 
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	err := rootCmd.Execute()
 	if err != nil {

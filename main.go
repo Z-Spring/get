@@ -14,11 +14,4 @@ func init() {
 
 func main() {
 	Execute()
-	//myredis.AddPkgToRedis2()
-	/*	fmt.Println(myredis.GetPkgRepoFromRedis())
-		fmt.Println(myredis.GetPkgNameFromRedis())*/
-	/*s := fetch.GetRespContent("goquery")
-	fmt.Println(s)*/
-	/*	pkg := fetch.GetPkg("beego")
-		fmt.Println(pkg)*/
 }
