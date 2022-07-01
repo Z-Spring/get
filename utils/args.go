@@ -1,4 +1,4 @@
-package args
+package utils
 
 func ConvertSliceToMap(s []string) map[string]struct{} {
 	set := make(map[string]struct{}, len(s))
