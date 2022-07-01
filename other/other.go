@@ -1,5 +1,0 @@
-package other
-
-func GetOtherPkgs() {
-
-}
