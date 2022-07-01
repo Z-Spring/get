@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -44,7 +45,13 @@ func GetPkg(keyWord string) Pkg {
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(content))
 	if err != nil {
 		// define errors
-		log.Println(err)
+		fmt.Println(err)
+	}
+
+	sum := doc.Find("div.SearchResults-summary > h1 > strong").Text()
+	modules, _ := strconv.Atoi(sum)
+	if modules == 0 {
+		return Pkg{}
 	}
 	var pkg Pkg
 
