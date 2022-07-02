@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"get/fetch"
 	"get/myredis"
+	"get/registry"
 	"get/utils"
 	"github.com/spf13/cobra"
 	"log"
@@ -18,45 +19,17 @@ func init() {
 }
 
 var (
-	searchCmd = &cobra.Command{
-		Use:   "search",
-		Short: "you can search get-cli's support packages.",
-		Args:  cobra.MinimumNArgs(1),
-		Run: func(cmd *cobra.Command, args []string) {
-			pkgNames := myredis.GetNamesFromRedis()
-			m := utils.ConvertSliceToMap(pkgNames)
-			for _, arg := range args {
-				// todo 这里也可以优化，从string里面取 【这里是从list里面取】
-				if utils.IsContain2(arg, m) {
-					pkgName, _ := myredis.GetPkg(arg)
-					fmt.Printf("found this package: %s\n", pkgName)
-					fmt.Printf("you can use [get %s] to get this package.", arg)
-				} else {
-					pkg := fetch.GetPkg(arg)
-					if pkg == (fetch.Pkg{}) {
-						fmt.Printf("can't find [%s] package!\n", arg)
-					} else {
-						myredis.AddNameToRedis(arg, pkg.FullName)
-						myredis.AddNameToRedis2(arg)
-						fmt.Printf("found this package: %s\n", pkg.FullName)
-						fmt.Printf("you can use [get %s] to get this package.", arg)
-					}
-				}
-			}
-		},
-	}
 	pkgName string
 )
 
-func CmdCreate(args []string) *cobra.Command {
+func HandleCommand(args []string) *cobra.Command {
 	if len(args) == 1 {
 		fmt.Printf("please input more args!\n\n")
 		return &cobra.Command{}
 	}
-	var name string
-	name = args[1]
+	name := args[1]
 	if name == "search" {
-		return searchCmd
+		return registry.NewSearchCommand()
 	}
 	if name == "-h" {
 		return &cobra.Command{}
@@ -65,12 +38,15 @@ func CmdCreate(args []string) *cobra.Command {
 	if pkgName == "" {
 		return &cobra.Command{}
 	}
-	cmd := DefineCmd(name)
+	if name == "beego" {
+		pkgName = "github.com/beego/beego/v2@latest"
+	}
+	cmd := NewCommand(name)
 	return cmd
 
 }
 
-func DefineCmd(name string) *cobra.Command {
+func NewCommand(name string) *cobra.Command {
 	cmd := &cobra.Command{
 		Use: name,
 		Run: func(cmd *cobra.Command, args []string) {
@@ -102,7 +78,7 @@ func GetPkgName(name string) string {
 
 	var err error
 	if !utils.IsContain2(name, m) {
-		pkg := fetch.GetPkg(name)
+		pkg := fetch.GetFirstPkgInfo(name)
 		if pkg == (fetch.Pkg{}) {
 			_, cancle := context.WithTimeout(context.Background(), 5*time.Second)
 			defer cancle()
