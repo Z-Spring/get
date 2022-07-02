@@ -1,6 +1,7 @@
 package fetch
 
 import (
+	"errors"
 	"fmt"
 	"github.com/PuerkitoBio/goquery"
 	"io"
@@ -39,7 +40,7 @@ func GetRespContent(keyWord string) string {
 	return string(bytes)
 }
 
-func GetPkg(keyWord string) Pkg {
+func GetFirstPkgInfo(keyWord string) Pkg {
 	content := GetRespContent(keyWord)
 
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(content))
@@ -78,5 +79,49 @@ func GetPkg(keyWord string) Pkg {
 	}
 
 	return pkg
+
+}
+
+func GetAllPkgInfos(keyWord string) []Pkg {
+	content := GetRespContent(keyWord)
+
+	doc, err := goquery.NewDocumentFromReader(strings.NewReader(content))
+	if err != nil {
+		err = errors.New("can't parse the fetch content")
+		fmt.Println(err.Error())
+	}
+
+	sum := doc.Find("div.SearchResults-summary > h1 > strong").Text()
+	modules, _ := strconv.Atoi(sum)
+	if modules == 0 {
+		return nil
+	}
+	var pkgs []Pkg
+
+	doc.Find("div.SearchSnippet").Each(func(i int, selection *goquery.Selection) {
+		shortName := selection.Find("div.SearchSnippet-headerContainer > h2 > a").Text()
+		shortName = strings.Split(shortName, "\n")[1]
+		shortName = strings.ReplaceAll(shortName, "\n", "")
+		shortName = strings.TrimSpace(shortName)
+
+		fullName := selection.Find("div.SearchSnippet-headerContainer > h2 > a > span").Text()
+		fullName = strings.Trim(fullName, "()")
+
+		synopsis := selection.Find("p").Text()
+		synopsis = strings.TrimSpace(synopsis)
+
+		imported := selection.Find("div.SearchSnippet-infoLabel >a > strong").Text()
+
+		pkg := Pkg{
+			ShortName: shortName,
+			FullName:  fullName,
+			Imported:  imported,
+			Synopsis:  synopsis,
+		}
+		pkgs = append(pkgs, pkg)
+
+	})
+
+	return pkgs
 
 }
