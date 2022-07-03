@@ -2,7 +2,8 @@ package registry
 
 import (
 	"fmt"
-	"get/fetch"
+	"github.com/murphyzz/get/fetch"
+
 	"github.com/spf13/cobra"
 	"time"
 )
@@ -19,13 +20,6 @@ func NewWeatherCommand() *cobra.Command {
 
 func runWeather(cmd *cobra.Command, args []string) {
 	go Spinner(100 * time.Millisecond)
-	/*go func() {
-		p := tea.NewProgram(spinner.InitialModel(), tea.WithMouseCellMotion())
-		if err := p.Start(); err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-	}()*/
 
 	city := args[0]
 	n, d, t, h := fetch.GetWeather(city)
