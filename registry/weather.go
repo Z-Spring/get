@@ -19,8 +19,22 @@ func NewWeatherCommand() *cobra.Command {
 
 func runWeather(cmd *cobra.Command, args []string) {
 	go Spinner(100 * time.Millisecond)
+	/*go func() {
+		p := tea.NewProgram(spinner.InitialModel(), tea.WithMouseCellMotion())
+		if err := p.Start(); err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+	}()*/
+
 	city := args[0]
 	n, d, t, h := fetch.GetWeather(city)
-	weather := fmt.Sprintf("\r%s %s %s  湿度：%d", n, d, t, h)
+	var weather string
+	if n == "" && h == 0 {
+		weather = ""
+		fmt.Printf("\r%s", weather)
+		return
+	}
+	weather = fmt.Sprintf("\r%s %s %s  湿度：%d", n, d, t, h)
 	fmt.Println(weather)
 }

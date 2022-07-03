@@ -3,6 +3,7 @@ package fetch
 import (
 	"fmt"
 	"github.com/tidwall/gjson"
+	"io"
 	"io/ioutil"
 	"net/http"
 )
@@ -58,9 +59,15 @@ func getWeatherData(lat, lon float64) []byte {
 
 	res, err := client.Do(req)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("\rfetch weather timeout, please try again later.")
+		return nil
 	}
-	defer res.Body.Close()
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			fmt.Println(err)
+		}
+	}(res.Body)
 
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
