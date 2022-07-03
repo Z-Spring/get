@@ -5,7 +5,7 @@ Copyright © 2022 murphy <murphyqq1@gmail.com>
 package main
 
 import (
-	"get/create"
+	"github.com/murphyzz/get/create"
 	"os"
 )
 
