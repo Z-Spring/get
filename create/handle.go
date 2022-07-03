@@ -23,17 +23,25 @@ var (
 )
 
 func HandleCommand(args []string) *cobra.Command {
+	//go registry.Spinner(100 * time.Millisecond)
+
 	if len(args) == 1 {
 		fmt.Printf("please input more args!\n\n")
 		return &cobra.Command{}
 	}
 	name := args[1]
+
 	if name == "search" {
 		return registry.NewSearchCommand()
 	}
 	if name == "-h" {
 		return &cobra.Command{}
 	}
+	if name == "weather" {
+		return registry.NewWeatherCommand()
+	}
+	//HandleSpecialCommand(name)
+
 	pkgName = GetPkgName(name)
 	if pkgName == "" {
 		return &cobra.Command{}
@@ -71,7 +79,7 @@ func NewCommand(name string) *cobra.Command {
 	return cmd
 }
 
-// GetPkgName input name find pkg
+// GetPkgName input name to find pkgName
 func GetPkgName(name string) string {
 	names := myredis.GetNamesFromRedis()
 	m := utils.ConvertSliceToMap(names)
