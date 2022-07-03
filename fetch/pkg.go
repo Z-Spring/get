@@ -18,7 +18,7 @@ type Pkg struct {
 	Synopsis  string
 }
 
-func GetRespContent(keyWord string) string {
+func getPkgContent(keyWord string) string {
 	url := fmt.Sprintf("https://pkg.go.dev/search?q=%s", keyWord)
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
@@ -41,7 +41,7 @@ func GetRespContent(keyWord string) string {
 }
 
 func GetFirstPkgInfo(keyWord string) Pkg {
-	content := GetRespContent(keyWord)
+	content := getPkgContent(keyWord)
 
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(content))
 	if err != nil {
@@ -83,7 +83,7 @@ func GetFirstPkgInfo(keyWord string) Pkg {
 }
 
 func GetAllPkgInfos(keyWord string) []Pkg {
-	content := GetRespContent(keyWord)
+	content := getPkgContent(keyWord)
 
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(content))
 	if err != nil {

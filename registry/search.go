@@ -25,14 +25,14 @@ func NewSearchCommand() *cobra.Command {
 	searchCmd := &cobra.Command{
 		Use:   "search",
 		Short: "you can search get-cli's support packages.",
-		Args:  cobra.MinimumNArgs(1),
+		Args:  cobra.ExactArgs(1),
 		Run:   runSearch,
 	}
 	return searchCmd
 }
 
 func runSearch(cmd *cobra.Command, args []string) {
-	go spinner(100 * time.Millisecond)
+	go Spinner(100 * time.Millisecond)
 
 	keyWord := args[0]
 	pkgs := fetch.GetAllPkgInfos(keyWord)
@@ -47,12 +47,6 @@ func runSearch(cmd *cobra.Command, args []string) {
 	i := IMPORTED
 	fmt.Printf(Header, n, p, i)
 
-	/*if keyWord == "beego" {
-		s := fmt.Sprintf("%-"+strconv.Itoa(sl)+"s", "beego")
-		f := fmt.Sprintf("%-"+strconv.Itoa(fl)+"s", "github.com/beego/beego/v2@latest")
-		i := "[OFFICIAL]"
-		fmt.Printf(DATA, s, f, i)
-	}*/
 	HandleSpecialPkg(sl, fl, keyWord, pkgs)
 
 	for _, pkg := range pkgs {
@@ -79,7 +73,7 @@ func GetMaxLen(pkgs []fetch.Pkg) (ShortNameMaxLen int, FullNameMaxLen int) {
 	return
 }
 
-func spinner(delay time.Duration) {
+func Spinner(delay time.Duration) {
 	for {
 		for _, r := range `-\|/` {
 			fmt.Printf("\r%c", r)
