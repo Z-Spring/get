@@ -2,8 +2,8 @@ package registry
 
 import (
 	"fmt"
-	"github.com/Z-Spring/get/fetch"
 	"github.com/spf13/cobra"
+	"github.com/z-spring/get/fetch"
 	"strconv"
 	"time"
 )

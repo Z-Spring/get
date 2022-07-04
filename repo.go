@@ -5,7 +5,7 @@ Copyright © 2022 murphy <murphyqq1@gmail.com>
 package main
 
 import (
-	"github.com/Z-Spring/get/create"
+	"github.com/z-spring/get/create"
 	"os"
 )
 
