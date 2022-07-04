@@ -3,6 +3,7 @@ package registry
 import (
 	"fmt"
 	"github.com/z-spring/get/fetch"
+	"github.com/z-spring/get/spinner"
 
 	"github.com/spf13/cobra"
 	"time"
@@ -19,7 +20,7 @@ func NewWeatherCommand() *cobra.Command {
 }
 
 func runWeather(cmd *cobra.Command, args []string) {
-	go Spinner(100 * time.Millisecond)
+	go spinner.Spinner(100 * time.Millisecond)
 
 	city := args[0]
 	n, d, t, h := fetch.GetWeather(city)

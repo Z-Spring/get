@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/z-spring/get/fetch"
+	"github.com/z-spring/get/spinner"
 	"strconv"
 	"time"
 )
@@ -32,7 +33,7 @@ func NewSearchCommand() *cobra.Command {
 }
 
 func runSearch(cmd *cobra.Command, args []string) {
-	go Spinner(100 * time.Millisecond)
+	go spinner.Spinner(100 * time.Millisecond)
 
 	keyWord := args[0]
 	pkgs := fetch.GetAllPkgInfos(keyWord)
@@ -71,15 +72,6 @@ func GetMaxLen(pkgs []fetch.Pkg) (ShortNameMaxLen int, FullNameMaxLen int) {
 	}
 
 	return
-}
-
-func Spinner(delay time.Duration) {
-	for {
-		for _, r := range `-\|/` {
-			fmt.Printf("\r%c", r)
-			time.Sleep(delay)
-		}
-	}
 }
 
 func HandleSpecialPkg(sl, fl int, keyWord string, pkgs []fetch.Pkg) {
