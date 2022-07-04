@@ -2,7 +2,7 @@ package registry
 
 import (
 	"fmt"
-	"github.com/murphyzz/get/fetch"
+	"github.com/Z-Spring/get/fetch"
 
 	"github.com/spf13/cobra"
 	"time"
