@@ -1,4 +1,4 @@
-module github.com/murphyzz/get
+module github.com/Z-Spring/get
 
 go 1.18
 
