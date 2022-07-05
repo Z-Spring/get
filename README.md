@@ -5,13 +5,29 @@ you can get go packages easily
 
 [中文文档]()
 
-*go get github.com/*
+Do you have this problem which you want to begin a new go project, first,
+you must go get some packages, like gin, redis, gorm and so on...
+
+example:
+
+*go get github.com/gin-gonic/gin/*  <p>
+*go get gorm.io/gorm/*  <p>
+*go get github.com/go-redis/redis/v9/*  <p>
+every time get new packages, you must remember its whole package path,
+that's so terrible. <p>
+
+Now, you can use getcli to simplify this process.   <p>
+When you want to get gin, just ***get gin***, that's so easy.
 
 
+## Install
 ```bash
 go install github.com/z-spring/get
 ```
 ## Usage
-you can use get [package] command to get go packages
+> two commands you can use
+* get search [package]
+* get [package]
 
-example: get gin you will get gin package
+you can use get [package] command to get  packages  <p>
+you can use get search [package] command to search  packages
