@@ -83,6 +83,10 @@ func HandleSpecialPkg(sl, fl int, keyWord string, pkgs []fetch.Pkg) {
 		pkg := "github.com/beego/beego/v2@latest"
 		f := fmt.Sprintf("%-"+strconv.Itoa(fl)+"s", pkg)
 		fmt.Printf(DATA, s, f, i)
+	case "get":
+		pkg := "github.com/z-spring/get@latest"
+		f := fmt.Sprintf("%-"+strconv.Itoa(fl)+"s", pkg)
+		fmt.Printf(DATA, s, f, i)
 	default:
 		fmt.Printf("\r")
 	}
