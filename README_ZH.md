@@ -28,6 +28,37 @@ go install github.com/z-spring/get
  * get search [package]
  * get [package]
 
+
 你可以用 get [package]来导入包  <p>
+
+```bash
+get gin
+get redis
+...
+```
 也可以用 get search [package]命令来搜索相关的包
 
+```bash
+get search gin
+
+$ get search gin
+NAME            PKG                                             IMPORTED
+gin             github.com/gin-gonic/gin                        31,327
+cors            github.com/gin-contrib/cors                     1,054
+ginSwagger      github.com/swaggo/gin-swagger                   620
+gzip            github.com/gin-contrib/gzip                     199
+jwt             github.com/appleboy/gin-jwt/v2                  166
+pprof           github.com/gin-contrib/pprof                    259
+sessions        github.com/gin-contrib/sessions                 602
+gin             gopkg.in/gin-gonic/gin.v1                       212
+static          github.com/gin-contrib/static                   273
+cache           github.com/gin-contrib/cache                    42
+gin             github.com/luraproject/lura/v2/router/gin       25
+gin             github.com/fixbanking/gin                       24
+ginzap          github.com/gin-contrib/zap                      84
+ginprometheus   github.com/zsais/go-gin-prometheus              55
+requestid       github.com/gin-contrib/requestid                31
+gintemplate     github.com/foolin/gin-template                  44
+multitemplate   github.com/gin-contrib/multitemplate            66
+favicon         github.com/thinkerou/favicon                    65
+```
