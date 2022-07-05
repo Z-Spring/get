@@ -3,7 +3,7 @@
 
 you can get go packages easily
 
-[中文文档]()
+[中文文档](https://github.com/Z-Spring/get/blob/master/README_ZH.md)
 
 Do you have this problem which you want to begin a new go project, first,
 you must go get some packages, like gin, redis, gorm and so on...

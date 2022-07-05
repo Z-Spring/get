@@ -3,7 +3,7 @@
 
 更便捷的导入包
 
-[中文文档]()
+[English](https://github.com/Z-Spring/get/blob/master/README.md)
 
 你是否有这样的困扰，当你想要开始一个新项目时，首先要导入各种包，比如说 
 gin, redis, gorm 等等。
