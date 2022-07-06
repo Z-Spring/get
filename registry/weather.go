@@ -4,10 +4,15 @@ import (
 	"fmt"
 	"github.com/z-spring/get/fetch"
 	"github.com/z-spring/get/spinner"
+	"log"
 
 	"github.com/spf13/cobra"
 	"time"
 )
+
+func init() {
+	log.SetFlags(log.Ltime | log.Ldate | log.Lshortfile)
+}
 
 func NewWeatherCommand() *cobra.Command {
 	weatherCmd := &cobra.Command{
