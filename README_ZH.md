@@ -21,7 +21,7 @@ gin, redis, gorm 等等。
 
 ## 安装
 ```bash
-go install github.com/z-spring/get
+go install github.com/z-spring/get@latest
 ```
 ## 用法
 > 有两个命令可以用

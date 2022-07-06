@@ -23,7 +23,7 @@ When you want to get gin, just ***get gin***, that's so easy.
 
 ## Install
 ```bash
-go install github.com/z-spring/get
+go install github.com/z-spring/get@latest
 ```
 ## Usage
 > two commands you can use
