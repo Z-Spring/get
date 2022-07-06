@@ -60,7 +60,8 @@ func NewCommand(name string) *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 			var cmddArg string
 			// 有些包用get，有些包用install
-			if name == "ioc-golang" || name == "wire" {
+			// todo: 这里可以弄成slice
+			if name == "ioc-golang" || name == "wire" || name == "get" {
 				cmddArg = "install"
 			} else {
 				cmddArg = "get"
