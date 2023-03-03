@@ -3,15 +3,17 @@ package create
 import (
 	"context"
 	"fmt"
+	"log"
+	"os"
+	"os/exec"
+	"sync"
+	"time"
+
 	"github.com/spf13/cobra"
 	"github.com/z-spring/get/fetch"
 	"github.com/z-spring/get/myredis"
 	"github.com/z-spring/get/registry"
 	"github.com/z-spring/get/utils"
-	"log"
-	"os"
-	"os/exec"
-	"time"
 )
 
 func init() {
@@ -22,7 +24,7 @@ var (
 	pkgName string
 )
 
-func HandleCommand(args []string) *cobra.Command {
+func HandleCommand(args []string) []*cobra.Command {
 	//go registry.Spinner(100 * time.Millisecond)
 
 	if len(args) == 1 {
@@ -32,25 +34,54 @@ func HandleCommand(args []string) *cobra.Command {
 	name := args[1]
 
 	if name == "search" {
-		return registry.NewSearchCommand()
+		return []*cobra.Command{registry.NewSearchCommand()}
 	}
 	if name == "-h" {
-		return &cobra.Command{}
+		return []*cobra.Command{&cobra.Command{}}
 	}
 	if name == "weather" {
-		return registry.NewWeatherCommand()
+		return []*cobra.Command{registry.NewWeatherCommand()}
 	}
-	//HandleSpecialCommand(name)
 
-	pkgName = GetPkgName(name)
-	if pkgName == "" {
-		return &cobra.Command{}
+	var cmds []*cobra.Command
+	//var cmd *cobra.Command
+	cmdChan := make(chan *cobra.Command, 10)
+	var wg sync.WaitGroup
+	// get multi pkgnames
+	for _, argName := range args[1:] {
+		wg.Add(1)
+		go func(name string) {
+			if name == "beego" {
+				pkgName = "github.com/beego/beego/v2@latest"
+			}
+			pkgName = GetPkgName(name)
+
+			// todo: 这里怎么实现？
+
+			cmdChan <- NewCommand(pkgName)
+			//cmd
+			//log.Println(cmds)
+
+			log.Printf("%s has downloaded!", pkgName)
+			wg.Done()
+		}(argName)
 	}
-	if name == "beego" {
-		pkgName = "github.com/beego/beego/v2@latest"
+	go func() {
+		wg.Wait()
+		close(cmdChan)
+	}()
+
+	for cmddd := range cmdChan {
+
+		cmds = append(cmds, cmddd)
 	}
-	cmd := NewCommand(name)
-	return cmd
+	//defer close(cmdChan)
+
+	/*	if pkgName == "" {
+		return []*cobra.Command{&cobra.Command{}}
+	}*/
+	//cmd := NewCommand(name)
+	return cmds
 
 }
 
@@ -67,6 +98,7 @@ func NewCommand(name string) *cobra.Command {
 				cmddArg = "get"
 			}
 			cmdd := exec.Command("go", cmddArg, "-u", pkgName)
+			//cmdd := exec.Command("go", cmddArg, "-u", name)
 
 			cmdd.Stdout = os.Stdout
 			cmdd.Stderr = os.Stderr
@@ -82,6 +114,7 @@ func NewCommand(name string) *cobra.Command {
 
 // GetPkgName input name to find pkgName
 func GetPkgName(name string) string {
+	// find whether the pkg is in redis
 	names := myredis.GetNamesFromRedis()
 	m := utils.ConvertSliceToMap(names)
 
@@ -91,7 +124,7 @@ func GetPkgName(name string) string {
 		if pkg == (fetch.Pkg{}) {
 			_, cancle := context.WithTimeout(context.Background(), 5*time.Second)
 			defer cancle()
-			fmt.Printf("can't find [%s] package!\n", name)
+			fmt.Printf("Timeout! Can't find [%s] package!\n", name)
 			return ""
 		}
 		pkgName = pkg.FullName
