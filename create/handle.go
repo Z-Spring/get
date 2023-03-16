@@ -27,10 +27,10 @@ var (
 func HandleCommand(args []string) []*cobra.Command {
 	//go registry.Spinner(100 * time.Millisecond)
 
-	if len(args) == 1 {
+	/* if len(args) == 1 {
 		fmt.Printf("please input more args!\n\n")
 		return &cobra.Command{}
-	}
+	} */
 	name := args[1]
 
 	if name == "search" {
@@ -54,7 +54,8 @@ func HandleCommand(args []string) []*cobra.Command {
 			if name == "beego" {
 				pkgName = "github.com/beego/beego/v2@latest"
 			}
-			pkgName = GetPkgName(name)
+			// don't get infos from redis
+			pkgName = GetPkgName2(name)
 
 			// todo: 这里怎么实现？
 
@@ -113,6 +114,7 @@ func NewCommand(name string) *cobra.Command {
 }
 
 // GetPkgName input name to find pkgName
+// Discarded.
 func GetPkgName(name string) string {
 	// find whether the pkg is in redis
 	names := myredis.GetNamesFromRedis()
@@ -130,8 +132,8 @@ func GetPkgName(name string) string {
 		pkgName = pkg.FullName
 		// 查找到后添加到redis中
 		// todo : 这里参数命名不规范 name pkgName分不清
-		myredis.AddNameToRedis(name, pkgName)
-		myredis.AddNameToRedis2(name)
+		// myredis.AddNameToRedis(name, pkgName)
+		// myredis.AddNameToRedis2(name)
 		return pkgName
 	} else {
 		pkgName, err = myredis.GetPkg(name)
@@ -143,7 +145,21 @@ func GetPkgName(name string) string {
 
 }
 
-func Ask() {
+func GetPkgName2(name string) string {
+
+	pkg := fetch.GetFirstPkgInfo(name)
+	if pkg == (fetch.Pkg{}) {
+		_, cancle := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancle()
+		fmt.Printf("Timeout! Can't find [%s] package!\n", name)
+		return ""
+	}
+	pkgName = pkg.FullName
+	return pkgName
+
+}
+
+/* func Ask() {
 	var y, n = "y", "n"
 	var input string
 	fmt.Printf("found this package: %s ,do you want to get it?(%s/%s)", pkgName, y, n)
@@ -153,4 +169,4 @@ func Ask() {
 	if input == "n" || input == "Y" {
 
 	}
-}
+} */
