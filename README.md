@@ -6,39 +6,39 @@ you can get go packages easily
 [中文文档](https://github.com/Z-Spring/get/blob/master/README_ZH.md)
 
 Do you have this problem which you want to begin a new go project, first,
-you must go get some packages, like gin, redis, gorm and so on...
+you must go get some packages, like `gin`, `redis`, `gorm` and so on...
 
 example:
 
-*go get github.com/gin-gonic/gin/*  <p>
-*go get gorm.io/gorm/*  <p>
-*go get github.com/go-redis/redis/v9/*  <p>
+***go get github.com/gin-gonic/gin/***  <p>
+***go get gorm.io/gorm/***  <p>
+***go get github.com/go-redis/redis/v9/***  <p>
 
 Every time get new packages, you must remember its whole package path,
 that's so terrible. <p>
 
 Now, you can use getcli to simplify this process.   <p>
-When you want to get gin, just ***get gin***, that's so easy.
+When you want to get gin, just `get gin`, that's so easy.
 
 
 ## Install
 ```bash
-go install github.com/z-spring/get@latest
+`go install` github.com/z-spring/get@latest
 ```
 ## Usage
 > two commands you can use
-* get search [package]
-* get [package] <p>
+* `get search` [package]
+* `get` [package] <p>
 
-you can use *get [package]* command to get  packages  <p>
+you can use `get [package]` command to get  packages  <p>
 
 ```bash
 get gin
 ```
-you can use *get search [package]* command to search  packages
+you can use `get search [package]` command to search  packages
 
 ```bash
-get search gin
+`get search` gin
 
 $ get search gin
 NAME            PKG                                             IMPORTED
