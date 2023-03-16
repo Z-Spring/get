@@ -11,7 +11,7 @@ import (
 func init() {
 	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
 }
-
+// Discarded
 func NewRedis() *redis.Client {
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     "101.42.224.110:6379",
