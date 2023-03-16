@@ -23,7 +23,7 @@ When you want to get gin, just `get gin`, that's so easy.
 
 ## Install
 ```bash
-`go install` github.com/z-spring/get@latest
+go install github.com/z-spring/get@latest
 ```
 ## Usage
 > two commands you can use
@@ -38,7 +38,7 @@ get gin
 you can use `get search [package]` command to search  packages
 
 ```bash
-`get search` gin
+get search gin
 
 $ get search gin
 NAME            PKG                                             IMPORTED
