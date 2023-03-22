@@ -1,13 +1,13 @@
 /*
 Copyright © 2022 murphy <murphyqq1@gmail.com>
-
 */
 package main
 
 import (
-	"fmt"
-	"github.com/spf13/cobra"
+	"log"
 	"os"
+
+	"github.com/spf13/cobra"
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -23,11 +23,8 @@ It's that simple!`,
 
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		os.Exit(1)
 	}
 
-}
-
-func init() {
 }

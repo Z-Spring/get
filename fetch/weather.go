@@ -21,7 +21,7 @@ type Main struct {
 }
 
 var (
-	rediss = myredis.NewRedis()
+	client = myredis.NewRedis()
 	ctx    = context.Background()
 )
 
@@ -61,7 +61,7 @@ type Location struct {
 	State   string
 }
 
-// GetLocation todo:添加redis 缓存  list   beijing lat lon
+// GetLocation get city's lat and lon
 func GetLocation(city string) (lat float64, lon float64) {
 	content := getLocationData(city)
 
@@ -83,14 +83,14 @@ func GetLocation(city string) (lat float64, lon float64) {
 }
 
 func addLocationToRedis(city string, lat float64, lon float64) {
-	rediss.LPush(ctx, city, lat, lon)
+	client.LPush(ctx, city, lat, lon)
 }
 
 func getLocationFromRedis(city string) (float64, float64) {
-	data := rediss.LRange(ctx, city, 0, 1)
+	data := client.LRange(ctx, city, 0, 1)
 	result, err := data.Result()
 	if err != nil {
-		fmt.Println(err)
+		fmt.Printf("\r%s", err)
 	}
 	if len(result) != 0 {
 		lat, _ := strconv.ParseFloat(result[0], 64)

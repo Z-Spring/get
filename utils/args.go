@@ -21,6 +21,7 @@ func IsContain(m map[string]struct{}, target []string) bool {
 	return false
 }
 
+// IsContain2 find value from redis
 func IsContain2(target string, m map[string]struct{}) bool {
 	_, ok := m[target]
 	return ok

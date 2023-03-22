@@ -1,22 +1,23 @@
 /*
 Copyright © 2022 murphy <murphyqq1@gmail.com>
-
 */
 package main
 
 import (
-	"github.com/z-spring/get/create"
 	"os"
+
+	"github.com/z-spring/get/create"
 )
 
 var (
-	// todo 这里要限制一下输入参数的数量  1个
 	pkgName      = os.Args
 	yourAddedCmd = create.HandleCommand(pkgName)
 )
 
 func init() {
-	rootCmd.AddCommand(
-		yourAddedCmd,
-	)
+	/* for _, v := range yourAddedCmd {
+		rootCmd.AddCommand(v)
+	} */
+	rootCmd.AddCommand(yourAddedCmd)
+
 }

@@ -2,11 +2,12 @@ package registry
 
 import (
 	"fmt"
+	"strconv"
+	"time"
+
 	"github.com/spf13/cobra"
 	"github.com/z-spring/get/fetch"
 	"github.com/z-spring/get/spinner"
-	"strconv"
-	"time"
 )
 
 const (
@@ -42,14 +43,15 @@ func runSearch(cmd *cobra.Command, args []string) {
 		return
 	}
 	sl, fl := GetMaxLen(pkgs)
-
+	// input header
+	// todo: 这里可以优化 用 tabwriter
 	n := fmt.Sprintf("\r%-"+strconv.Itoa(sl)+"s", NAME)
 	p := fmt.Sprintf("%-"+strconv.Itoa(fl)+"s", PKG)
 	i := IMPORTED
 	fmt.Printf(Header, n, p, i)
 
 	HandleSpecialPkg(sl, fl, keyWord, pkgs)
-
+	// input table data
 	for _, pkg := range pkgs {
 		s := fmt.Sprintf("%-"+strconv.Itoa(sl)+"s", pkg.ShortName)
 		f := fmt.Sprintf("%-"+strconv.Itoa(fl)+"s", pkg.FullName)
