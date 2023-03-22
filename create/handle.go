@@ -43,10 +43,21 @@ func HandleCommand(args []string) []*cobra.Command {
 		return []*cobra.Command{registry.NewWeatherCommand()}
 	}
 
-	var cmds []*cobra.Command
-	//var cmd *cobra.Command
+	cmds := multiNames(args)
+
+	return cmds
+
+}
+
+func multiNames(args []string) []*cobra.Command {
+	var (
+		cmds []*cobra.Command
+		wg   sync.WaitGroup
+	)
+
+	// max commands: 10
 	cmdChan := make(chan *cobra.Command, 10)
-	var wg sync.WaitGroup
+
 	// get multi pkgnames
 	for _, argName := range args[1:] {
 		wg.Add(1)
@@ -56,14 +67,8 @@ func HandleCommand(args []string) []*cobra.Command {
 			}
 			// don't get infos from redis
 			pkgName = GetPkgName2(name)
-
-			// todo: 这里怎么实现？
-
 			cmdChan <- NewCommand(pkgName)
-			//cmd
-			//log.Println(cmds)
-
-			log.Printf("%s has downloaded!", pkgName)
+			// log.Printf("%s has downloaded!", pkgName)
 			wg.Done()
 		}(argName)
 	}
@@ -73,19 +78,13 @@ func HandleCommand(args []string) []*cobra.Command {
 	}()
 
 	for cmddd := range cmdChan {
-
 		cmds = append(cmds, cmddd)
 	}
-	//defer close(cmdChan)
 
-	/*	if pkgName == "" {
-		return []*cobra.Command{&cobra.Command{}}
-	}*/
-	//cmd := NewCommand(name)
 	return cmds
-
 }
 
+// convert package names to command
 func NewCommand(name string) *cobra.Command {
 	cmd := &cobra.Command{
 		Use: name,
@@ -145,10 +144,11 @@ func GetPkgName(name string) string {
 
 }
 
+// GetPkgName get full names from web
 func GetPkgName2(name string) string {
-
 	pkg := fetch.GetFirstPkgInfo(name)
 	if pkg == (fetch.Pkg{}) {
+		// 5秒后超时
 		_, cancle := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancle()
 		fmt.Printf("Timeout! Can't find [%s] package!\n", name)
@@ -158,15 +158,3 @@ func GetPkgName2(name string) string {
 	return pkgName
 
 }
-
-/* func Ask() {
-	var y, n = "y", "n"
-	var input string
-	fmt.Printf("found this package: %s ,do you want to get it?(%s/%s)", pkgName, y, n)
-	if _, err := fmt.Scanf("%s", &input); err != nil {
-		fmt.Printf("fmt.Scanf failed with '%s'\n", err)
-	}
-	if input == "n" || input == "Y" {
-
-	}
-} */
