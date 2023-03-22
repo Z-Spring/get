@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 	"os/exec"
-	"sync"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -24,64 +23,27 @@ var (
 	pkgName string
 )
 
-func HandleCommand(args []string) []*cobra.Command {
-	//go registry.Spinner(100 * time.Millisecond)
-
-	/* if len(args) == 1 {
-		fmt.Printf("please input more args!\n\n")
+func HandleCommand(args []string) *cobra.Command {
+	if len(args) == 1 {
 		return &cobra.Command{}
-	} */
+	}
 	name := args[1]
+	pkgName = GetPkgName2(name)
 
-	if name == "search" {
-		return []*cobra.Command{registry.NewSearchCommand()}
-	}
-	if name == "-h" {
-		return []*cobra.Command{&cobra.Command{}}
-	}
-	if name == "weather" {
-		return []*cobra.Command{registry.NewWeatherCommand()}
-	}
-
-	cmds := multiNames(args)
-
-	return cmds
-
-}
-
-func multiNames(args []string) []*cobra.Command {
-	var (
-		cmds []*cobra.Command
-		wg   sync.WaitGroup
-	)
-
-	// max commands: 10
-	cmdChan := make(chan *cobra.Command, 10)
-
-	// get multi pkgnames
-	for _, argName := range args[1:] {
-		wg.Add(1)
-		go func(name string) {
-			if name == "beego" {
-				pkgName = "github.com/beego/beego/v2@latest"
-			}
-			// don't get infos from redis
-			pkgName = GetPkgName2(name)
-			cmdChan <- NewCommand(pkgName)
-			// log.Printf("%s has downloaded!", pkgName)
-			wg.Done()
-		}(argName)
-	}
-	go func() {
-		wg.Wait()
-		close(cmdChan)
-	}()
-
-	for cmddd := range cmdChan {
-		cmds = append(cmds, cmddd)
+	switch name {
+	case "search":
+		return registry.NewSearchCommand()
+	case "-h":
+		return &cobra.Command{}
+	case "":
+		return &cobra.Command{}
+	case "weather":
+		return registry.NewWeatherCommand()
+	default:
+		cmd := NewCommand(name)
+		return cmd
 	}
 
-	return cmds
 }
 
 // convert package names to command
