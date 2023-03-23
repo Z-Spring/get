@@ -10,9 +10,9 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/z-spring/get/fetch"
-	"github.com/z-spring/get/myredis"
+	// "github.com/z-spring/get/myredis"
 	"github.com/z-spring/get/registry"
-	"github.com/z-spring/get/utils"
+	// "github.com/z-spring/get/utils"
 )
 
 func init() {
@@ -76,7 +76,7 @@ func NewCommand(name string) *cobra.Command {
 
 // GetPkgName input name to find pkgName
 // Discarded.
-func GetPkgName(name string) string {
+/* func GetPkgName(name string) string {
 	// find whether the pkg is in redis
 	names := myredis.GetNamesFromRedis()
 	m := utils.ConvertSliceToMap(names)
@@ -104,7 +104,7 @@ func GetPkgName(name string) string {
 		return pkgName
 	}
 
-}
+} */
 
 // GetPkgName get full names from web
 func GetPkgName2(name string) string {
