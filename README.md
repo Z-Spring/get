@@ -30,10 +30,10 @@ go install github.com/z-spring/get@latest
 * `get search` [package]
 * `get` [package] <p>
 
-you can use `get [package]` command to get  packages  <p>
+you can use `get [package...]` command to get  packages  <p>
 
 ```bash
-get gin
+get gin gorm cobra
 ```
 you can use `get search [package]` command to search  packages
 

@@ -4,7 +4,7 @@
 更便捷的导入包
 
 todo:
-- [ ] 批量添加各种包
+- [x] 批量添加各种包
 - [ ] ...
 
 [English](https://github.com/Z-Spring/get/blob/master/README.md)
