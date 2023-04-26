@@ -24,13 +24,11 @@ func getPkgContent(keyWord string) string {
 	req.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.63 Safari/537.36")
 
 	if err != nil {
-		// log.Println(err)
 		return "can not send request, please try again later"
 	}
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return "can not send request, please try again later"
-		// log.Println(err)
 	}
 
 	bytes, err := io.ReadAll(resp.Body)
