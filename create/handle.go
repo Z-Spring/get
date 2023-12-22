@@ -1,12 +1,10 @@
 package create
 
 import (
-	"context"
 	"fmt"
 	"log"
 	"os"
 	"os/exec"
-	"time"
 
 	"github.com/spf13/cobra"
 	"github.com/z-spring/get/fetch"
@@ -28,7 +26,7 @@ func HandleCommand(args []string) *cobra.Command {
 		return &cobra.Command{}
 	}
 	name := args[1]
-	pkgName = GetPkgName2(name)
+	pkgName = GetPkgName2(args[2])
 
 	switch name {
 	case "search":
@@ -106,14 +104,11 @@ func NewCommand(name string) *cobra.Command {
 
 } */
 
-// GetPkgName get full names from web
+// GetPkgName2 GetPkgName get full names from web
 func GetPkgName2(name string) string {
 	pkg := fetch.GetFirstPkgInfo(name)
 	if pkg == (fetch.Pkg{}) {
-		// 5秒后超时
-		_, cancle := context.WithTimeout(context.Background(), 5*time.Second)
-		defer cancle()
-		fmt.Printf("Timeout! Can't find [%s] package!\n", name)
+		fmt.Printf("Can't find [%s] package!\n", name)
 		return ""
 	}
 	pkgName = pkg.FullName
