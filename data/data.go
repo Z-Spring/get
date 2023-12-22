@@ -18,6 +18,6 @@ func SetRedis() *redis.Client {
 
 func AddDataToRedis(key string, value string) {
 	client := SetRedis()
-	client.Set(context.Background(), key, value, 24 * time.Hour)
+	client.Set(context.Background(), key, value, 24*time.Hour)
 
 }
