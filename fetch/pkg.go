@@ -3,11 +3,13 @@ package fetch
 import (
 	"errors"
 	"fmt"
-	"github.com/PuerkitoBio/goquery"
 	"io"
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
+
+	"github.com/PuerkitoBio/goquery"
 )
 
 type Pkg struct {
@@ -21,12 +23,16 @@ func getPkgContent(keyWord string) string {
 	url := fmt.Sprintf("https://pkg.go.dev/search?q=%s", keyWord)
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
-	req.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.63 Safari/537.36")
+	req.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
 
 	if err != nil {
 		return "can not send request, please try again later"
 	}
-	resp, err := http.DefaultClient.Do(req)
+	client := http.Client{
+		Timeout: 5 * time.Second,
+	}
+
+	resp, err := client.Do(req)
 	if err != nil {
 		return "can not send request, please try again later"
 	}
@@ -49,7 +55,7 @@ func GetFirstPkgInfo(keyWord string) Pkg {
 		fmt.Println(err)
 	}
 
-	sum := doc.Find("div.SearchResults-summary > h1 > strong").Text()
+	sum := doc.Find("div.SearchResults-summary > strong").Text()
 	modules, _ := strconv.Atoi(sum)
 	if modules == 0 {
 		return Pkg{}
@@ -91,7 +97,7 @@ func GetAllPkgInfos(keyWord string) []Pkg {
 		fmt.Println(err.Error())
 	}
 
-	sum := doc.Find("div.SearchResults-summary > h1 > strong").Text()
+	sum := doc.Find("div.SearchResults-summary > strong").Text()
 	modules, _ := strconv.Atoi(sum)
 	if modules == 0 {
 		return nil
