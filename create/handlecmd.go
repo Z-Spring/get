@@ -29,7 +29,6 @@ func HandleCommand(args []string) *cobra.Command {
 	}
 	name := args[1]
 	pkgName = GetPkgName2(name)
-
 	switch name {
 	case "search":
 		return registry.NewSearchCommand()
@@ -74,38 +73,6 @@ func NewCommand(name string) *cobra.Command {
 	return cmd
 }
 
-// GetPkgName input name to find pkgName
-// Discarded.
-/* func GetPkgName(name string) string {
-	// find whether the pkg is in redis
-	names := myredis.GetNamesFromRedis()
-	m := utils.ConvertSliceToMap(names)
-
-	var err error
-	if !utils.IsContain2(name, m) {
-		pkg := fetch.GetFirstPkgInfo(name)
-		if pkg == (fetch.Pkg{}) {
-			_, cancle := context.WithTimeout(context.Background(), 5*time.Second)
-			defer cancle()
-			fmt.Printf("Timeout! Can't find [%s] package!\n", name)
-			return ""
-		}
-		pkgName = pkg.FullName
-		// 查找到后添加到redis中
-		// todo : 这里参数命名不规范 name pkgName分不清
-		// myredis.AddNameToRedis(name, pkgName)
-		// myredis.AddNameToRedis2(name)
-		return pkgName
-	} else {
-		pkgName, err = myredis.GetPkg(name)
-		if err != nil {
-			fmt.Println(err)
-		}
-		return pkgName
-	}
-
-} */
-
 // GetPkgName get full names from web
 func GetPkgName2(name string) string {
 	pkg := fetch.GetFirstPkgInfo(name)
@@ -114,6 +81,7 @@ func GetPkgName2(name string) string {
 		_, cancle := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancle()
 		fmt.Printf("Timeout! Can't find [%s] package!\n", name)
+		os.Exit(1)
 		return ""
 	}
 	pkgName = pkg.FullName
