@@ -15,9 +15,6 @@ var (
 )
 
 func init() {
-	/* for _, v := range yourAddedCmd {
-		rootCmd.AddCommand(v)
-	} */
 	rootCmd.AddCommand(yourAddedCmd)
 
 }
