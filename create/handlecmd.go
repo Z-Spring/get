@@ -8,9 +8,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/z-spring/get/fetch"
-	// "github.com/z-spring/get/myredis"
 	"github.com/z-spring/get/registry"
-	// "github.com/z-spring/get/utils"
 )
 
 func init() {
@@ -43,21 +41,24 @@ func HandleCommand(args []string) *cobra.Command {
 
 }
 
-// convert package names to command
+// NewCommand convert package names to command
 func NewCommand(name string) *cobra.Command {
+	installPackages := map[string]bool{
+		"ioc-golang": true,
+		"wire":       true,
+		"get":        true,
+	}
 	cmd := &cobra.Command{
 		Use: name,
 		Run: func(cmd *cobra.Command, args []string) {
 			var cmddArg string
 			// 有些包用get，有些包用install
-			// todo: 这里可以弄成slice
-			if name == "ioc-golang" || name == "wire" || name == "get" {
+			if installPackages[name] {
 				cmddArg = "install"
 			} else {
 				cmddArg = "get"
 			}
 			cmdd := exec.Command("go", cmddArg, "-u", pkgName)
-			//cmdd := exec.Command("go", cmddArg, "-u", name)
 
 			cmdd.Stdout = os.Stdout
 			cmdd.Stderr = os.Stderr
