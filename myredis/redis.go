@@ -3,15 +3,17 @@ package myredis
 import (
 	"context"
 	"errors"
-	"github.com/go-redis/redis/v9"
 	"log"
 	"time"
+
+	"github.com/go-redis/redis/v9"
 )
 
 func init() {
 	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
 }
-// Discarded
+
+// NewRedis Discarded
 func NewRedis() *redis.Client {
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     "101.42.224.110:6379",
